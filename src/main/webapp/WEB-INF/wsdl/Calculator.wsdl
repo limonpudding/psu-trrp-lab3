@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://localhost:8080/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://localhost:8080/"
+                  name="CalculationSoap">
+    <wsdl:documentation
+            xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+        <img src="webservice.jpg" />
+    </wsdl:documentation>
+
+    <wsdl:types>
+        <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://localhost:8080/"
+                    elementFormDefault="qualified" version="1.0">
+
+            <simpleType name="Operation">
+                <restriction base="string">
+                    <enumeration value="add"/>
+                    <enumeration value="sub"/>
+                    <enumeration value="mul"/>
+                    <enumeration value="div"/>
+                </restriction>
+            </simpleType>
+
+            <element name="Params">
+                <complexType>
+                    <sequence>
+                        <element name="arg1" type="int"/>
+                        <element name="arg2" type="int"/>
+                        <element name="operation" type="tns:Operation"/>
+                    </sequence>
+                </complexType>
+            </element>
+
+            <element name="Answer">
+                <complexType>
+                    <sequence>
+                        <element name="result" type="int"/>
+                    </sequence>
+                </complexType>
+            </element>
+        </xsd:schema>
+    </wsdl:types>
+
+    <wsdl:message name="GetCalculation">
+        <wsdl:part name="params" element="tns:Params"/>
+    </wsdl:message>
+
+    <wsdl:message name="GetCalculationResponse">
+        <wsdl:part name="answer" element="tns:Answer"/>
+    </wsdl:message>
+
+    <wsdl:portType name="CalculationSoap">
+        <wsdl:operation name="calculate">
+            <wsdl:input message="tns:GetCalculation"/>
+            <wsdl:output message="tns:GetCalculationResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="CalculationSoap" type="tns:CalculationSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="calculate">
+            <soap:operation soapAction="calculate" style="document"/>
+            <wsdl:input name="GetCalculation">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="GetCalculationResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="CalculationSoap">
+        <wsdl:port name="CalculationSoap" binding="tns:CalculationSoap">
+            <soap:address location="/calculate"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

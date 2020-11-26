@@ -7,23 +7,56 @@
     <groupId>ru.psu.martyshenko.trrp</groupId>
     <artifactId>psu-trrp-lab3</artifactId>
     <version>0.0.1</version>
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.1.RELEASE</version>
-    </parent>
+    <packaging>war</packaging>
 
     <dependencies>
+        <!-- Spring dependencies -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.2.11.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.2.11.RELEASE</version>
         </dependency>
 
+        <!-- JAX-WS dependencies -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web-services</artifactId>
+            <groupId>org.jvnet.jax-ws-commons.spring</groupId>
+            <artifactId>jaxws-spring</artifactId>
+            <version>1.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>2.3.3</version>
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <wsdlDirectory>src/main/webapp/WEB-INF/wsdl/</wsdlDirectory>
+                    <wsdlFiles><wsdlFile>Calculator.wsdl</wsdlFile></wsdlFiles>
+                    <packageName>ru.psu.martyshenko.trrp.lab3.wsdl</packageName>
+                    <inlineSchemas>true</inlineSchemas>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>wsdl_import</id>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
+        </plugins>
+    </build>
 </project>
