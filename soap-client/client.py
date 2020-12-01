@@ -1,8 +1,23 @@
 from soap import soap_request
 from params import Params
+import yaml
+
+
+def load_wsdl_url():
+    with open("config.yaml", 'r') as stream:
+        try:
+            data = yaml.safe_load(stream)
+            print('Загружен файл конфигурации.')
+            print(f"Ссылка на сервис: {data['soap.wsdl.url']}.")
+            return data['soap.wsdl.url']
+        except yaml.YAMLError:
+            print('Произошла ошибка при попытке загрузки wsdl url из файла конфигурации!')
+            print('Будет использовано стандартной значение - http://localhost:8080/psu-trrp-lab3/calculate?wsdl.')
+            return 'http://localhost:8080/psu-trrp-lab3/calculate?wsdl'
 
 
 def menu():
+    url = load_wsdl_url()
     while True:
         print("Выберите операцию:")
         print("1. Сложение")
@@ -32,7 +47,7 @@ def menu():
         print("Введите 2 операнд:")
         arg2 = input()
         params = Params(arg1, arg2, operation)
-        print(f"Результат: {soap_request(params)}")
+        print(f"Результат: {soap_request(url, params)}")
         print('---------------------------------')
 
 
